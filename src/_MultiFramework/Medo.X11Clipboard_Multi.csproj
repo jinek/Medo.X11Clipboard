@@ -1,0 +1,64 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <AssemblyName>Medo.X11Clipboard</AssemblyName>
+        <RootNamespace>Medo.X11</RootNamespace>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+        <TargetFrameworks>net8.0</TargetFrameworks>
+        <LangVersion>12.0</LangVersion>
+        <Nullable>enable</Nullable>
+        <IsAotCompatible>true</IsAotCompatible>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <Deterministic>true</Deterministic>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <AnalysisLevel>latest</AnalysisLevel>
+        <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <NoWarn>CA1720</NoWarn>
+        <!-- CA1720: Identifiers should not contain type names -->
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageId>Medo.X11Clipboard</PackageId>
+        <Version>0.0.0</Version>
+        <Authors>Josip Medved</Authors>
+        <Copyright>Copyright (c) 2024 Josip Medved</Copyright>
+        <Company>www.medo64.com</Company>
+        <PackageTags>X11,Clipboard,Primary</PackageTags>
+        <PackageIcon>ICON.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/medo64/Medo.X11Clipboard/</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/medo64/Medo.X11Clipboard/</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
+        <Description>
+            A library that allows UTF-8 access for X11's both primary selection
+            and main clipboard.
+        </Description>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="../Medo.X11Clipboard/*.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="../../ICON.png" Pack="true" PackagePath="" />
+        <None Include="../../README.md" Pack="true" PackagePath="" />
+        <None Include="../../LICENSE.md" Pack="true" PackagePath="" />
+    </ItemGroup>
+
+</Project>
