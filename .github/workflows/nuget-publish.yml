@@ -32,9 +32,9 @@ jobs:
             -p:PackageReleaseNotes="$(cat CHANGELOG.md)"
 
       - name: Publish to NuGet
-        if: ${{ secrets.NUGET_API_KEY != '' }}
+        if: ${{ NUGET_API_KEY != '' }}
         env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          NUGET_API_KEY: ${{ NUGET_API_KEY }}
         run: |
           dotnet nuget push "./artifacts/*.nupkg" \
             --source "https://api.nuget.org/v3/index.json" \
@@ -46,5 +46,5 @@ jobs:
             --skip-duplicate
 
       - name: Skip publish (no API key configured)
-        if: ${{ secrets.NUGET_API_KEY == '' }}
+        if: ${{ NUGET_API_KEY == '' }}
         run: echo "NUGET_API_KEY secret not configured. Package pack completed; skipping publish."
