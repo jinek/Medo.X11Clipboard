@@ -2,8 +2,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <AssemblyName>Medo.X11Clipboard</AssemblyName>
-        <RootNamespace>Medo.X11</RootNamespace>
+        <AssemblyName>jinek.X11Clipboard.Fork</AssemblyName>
+        <RootNamespace>jinek.X11</RootNamespace>
     </PropertyGroup>
 
     <PropertyGroup>

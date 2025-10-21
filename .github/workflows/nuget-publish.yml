@@ -1,0 +1,50 @@
+name: Build and Publish NuGet
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  pack-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore
+        run: dotnet restore src/_MultiFramework/Medo.X11Clipboard_Multi.csproj
+
+      - name: Build (Release)
+        run: dotnet build src/_MultiFramework/Medo.X11Clipboard_Multi.csproj --configuration Release --no-restore
+
+      - name: Pack
+        run: |
+          dotnet pack src/_MultiFramework/Medo.X11Clipboard_Multi.csproj \
+            --configuration Release \
+            --no-build \
+            --output ./artifacts \
+            -p:ContinuousIntegrationBuild=true \
+            -p:PackageReleaseNotes="$(cat CHANGELOG.md)"
+
+      - name: Publish to NuGet
+        if: ${{ secrets.NUGET_API_KEY != '' }}
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          dotnet nuget push "./artifacts/*.nupkg" \
+            --source "https://api.nuget.org/v3/index.json" \
+            --api-key "$NUGET_API_KEY" \
+            --skip-duplicate
+          dotnet nuget push "./artifacts/*.snupkg" \
+            --source "https://api.nuget.org/v3/index.json" \
+            --api-key "$NUGET_API_KEY" \
+            --skip-duplicate
+
+      - name: Skip publish (no API key configured)
+        if: ${{ secrets.NUGET_API_KEY == '' }}
+        run: echo "NUGET_API_KEY secret not configured. Package pack completed; skipping publish."

@@ -1,6 +1,6 @@
 /* Fork-specific exception types for Medo.X11Clipboard */
 
-namespace Medo.X11;
+namespace jinek.X11;
 
 using System;
 

@@ -26,7 +26,7 @@ You can find packaged library at [NuGet][nuget_x11clipboard].
 To write and read X11 primary selection (aka, middle-click clipboard):
 ```csharp
 using System;
-using Medo.X11;
+using jinek.X11;
 
 X11Clipboard.Primary.SetText("My text.");
 Console.WriteLine(X11Clipboard.Primary.GetText());
@@ -35,7 +35,7 @@ Console.WriteLine(X11Clipboard.Primary.GetText());
 To write and read normal clipboard:
 ```csharp
 using System;
-using Medo.X11;
+using jinek.X11;
 
 X11Clipboard.Clipboard.SetText("My text.");
 Console.WriteLine(X11Clipboard.Clipboard.GetText());
@@ -50,7 +50,7 @@ Console.WriteLine(X11Clipboard.Clipboard.GetText());
 - A new UnhandledException event is raised when an exception occurs in the background X11 event loop. You can observe and optionally handle it:
 
 ```csharp
-using Medo.X11;
+using jinek.X11;
 
 // Subscribe once at startup
 X11Clipboard.Clipboard.UnhandledException += (sender, e) => {
@@ -62,4 +62,4 @@ X11Clipboard.Clipboard.UnhandledException += (sender, e) => {
 };
 ```
 
-[nuget_x11clipboard]: https://www.nuget.org/packages/Medo.X11Clipboard/
+[nuget_x11clipboard]: https://www.nuget.org/packages/jinek.X11Clipboard.Fork/

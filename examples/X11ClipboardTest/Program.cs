@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
-using Medo.X11;
+using jinek.X11;
 
 namespace X11ClipboardTest;
 

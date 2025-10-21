@@ -4,7 +4,7 @@
 
 //2024-07-20: Initial version
 
-namespace Medo.X11;
+namespace jinek.X11;
 
 using System;
 using System.Diagnostics;
