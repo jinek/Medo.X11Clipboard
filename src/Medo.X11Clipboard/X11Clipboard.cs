@@ -1,4 +1,6 @@
-/* Josip Medved <jmedved@jmedved.com> * www.medo64.com * MIT License */
+/* Josip Medved <jmedved@jmedved.com> * www.medo64.com * MIT License
+   Forked by Evgeny Gorbovoy <jinek@msn.com>
+   Changes implemented by Junie with ChatGPT-5 */
 
 //2024-07-20: Initial version
 
@@ -22,53 +24,53 @@ public class X11Clipboard {
         ClipboardTag = clipboardAtomName[0..3];
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
             Debug.WriteLine($"[X11Clipboard:{ClipboardTag}] Only supported on Linux");
-            return;
+            throw new PlatformNotSupportedException("X11 clipboard is only supported on Linux.");
         }
 
         try {
             DisplayPtr = NativeMethods.XOpenDisplay(null);  // let's not worry about dispose
             if (DisplayPtr == IntPtr.Zero) {
                 Debug.WriteLine($"[X11Clipboard:{ClipboardTag}] Failed to open display");
-                return;
+                throw new X11ClipboardException("Failed to open X11 display.");
             }
             Debug.WriteLine($"[X11Clipboard:{ClipboardTag}] Display: 0x{DisplayPtr:X2}");
-        } catch (DllNotFoundException) {
+        } catch (DllNotFoundException ex) {
             Debug.WriteLine($"[X11Clipboard:{ClipboardTag}] X11 not available");
-            return;
+            throw new X11ClipboardException("Required X11 library (libX11) was not found.", ex);
         }
 
         RootWindowPtr = NativeMethods.XDefaultRootWindow(DisplayPtr);
         if (RootWindowPtr == IntPtr.Zero) {
             Debug.WriteLine($"[X11Clipboard:{ClipboardTag}] Failed to open root window");
-            return;
+            throw new X11ClipboardException("Failed to open X11 root window.");
         }
         Debug.WriteLine($"[X11Clipboard:{ClipboardTag}] RootWindow: 0x{RootWindowPtr:X2}");
 
         WindowPtr = NativeMethods.XCreateSimpleWindow(DisplayPtr, RootWindowPtr, -10, -10, 1, 1, 0, 0, 0);
         if (WindowPtr == IntPtr.Zero) {
             Debug.WriteLine($"[X11Clipboard:{ClipboardTag}] Failed to open new window");
-            return;
+            throw new X11ClipboardException("Failed to create X11 window for clipboard operations.");
         }
         Debug.WriteLine($"[X11Clipboard:{ClipboardTag}] Window: 0x{WindowPtr:X2}");
 
         TargetsAtom = NativeMethods.XInternAtom(DisplayPtr, "TARGETS", only_if_exists: false);
         if (TargetsAtom == IntPtr.Zero) {
             Debug.WriteLine($"[X11Clipboard:{ClipboardTag}] Failed to open TARGETS atom");
-            return;
+            throw new X11ClipboardException("Failed to open TARGETS atom.");
         }
         Debug.WriteLine($"[X11Clipboard:{ClipboardTag}] Atom[TARGETS]: 0x{TargetsAtom:X2}");
 
         ClipboardAtom = NativeMethods.XInternAtom(DisplayPtr, clipboardAtomName, only_if_exists: false);
         if (ClipboardAtom == 0) {
             Debug.WriteLine($"[X11Clipboard:{ClipboardTag}] Failed to open {clipboardAtomName} atom");
-            return;
+            throw new X11ClipboardException($"Failed to open {clipboardAtomName} atom.");
         }
         Debug.WriteLine($"[X11Clipboard:{ClipboardTag}] Atom[{clipboardAtomName}]: 0x{ClipboardAtom:X2}");
 
         Utf8StringAtom = NativeMethods.XInternAtom(DisplayPtr, "UTF8_STRING", only_if_exists: false);
         if (Utf8StringAtom == 0) {
             Debug.WriteLine($"[X11Clipboard:{ClipboardTag}] Failed to open UTF8_STRING atom");
-            return;
+            throw new X11ClipboardException("Failed to open UTF8_STRING atom.");
         }
         Debug.WriteLine($"[X11Clipboard:{ClipboardTag}] Atom[UTF8_STRING]: 0x{Utf8StringAtom:X2}");
 
@@ -76,7 +78,7 @@ public class X11Clipboard {
         MetaSelectionAtom = NativeMethods.XInternAtom(DisplayPtr, metaSelectionAtomName, only_if_exists: false);
         if (MetaSelectionAtom == 0) {
             Debug.WriteLine($"[X11Clipboard:{ClipboardTag}] Failed to open {metaSelectionAtomName} atom");
-            return;
+            throw new X11ClipboardException($"Failed to open {metaSelectionAtomName} atom.");
         }
         Debug.WriteLine($"[X11Clipboard:{ClipboardTag}] Atom[{metaSelectionAtomName}]: 0x{MetaSelectionAtom:X2}");
 
@@ -102,6 +104,13 @@ public class X11Clipboard {
     private readonly AutoResetEvent BytesInLock = new(false);  // signaled when BytesIn is set
     private byte[] BytesIn = [];
 
+    /// <summary>
+    /// Raised when an exception occurs inside the background X11 event loop.
+    /// Handlers can set e.Handled = true to prevent the exception from crashing the thread.
+    /// </summary>
+    public event EventHandler<X11ClipboardLoopExceptionEventArgs>? UnhandledException;
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Deliberately catch to raise UnhandledException and rethrow if unhandled.")]
     private void EventLoop() {
         Debug.WriteLine($"[X11Clipboard:{ClipboardTag}] Ready for events");
 
@@ -213,10 +222,10 @@ public class X11Clipboard {
                         }
                         break;
                 }
-#pragma warning disable CA1031
             } catch (Exception ex) {
-#pragma warning restore CA1031
-                Debug.WriteLine($"[X11Clipboard:{ClipboardTag}] Error: {ex.Message}");
+                var args = new X11ClipboardLoopExceptionEventArgs(ex, "EventLoop");
+                UnhandledException?.Invoke(this, args);
+                if (!args.Handled) { throw; }
             }
         }
     }

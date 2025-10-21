@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <AssemblyName>Medo.X11Clipboard</AssemblyName>
@@ -24,6 +25,11 @@
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <NoWarn>CA1720</NoWarn>
         <!-- CA1720: Identifiers should not contain type names -->
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Authors>Evgeny Gorbovoy</Authors>
+        <Description>Fork of Medo.X11Clipboard by Josip Medved. CA1031 compliance, custom exception type (X11ClipboardException), and UnhandledException event. Changes implemented by Junie with ChatGPT-5.</Description>
     </PropertyGroup>
 
 </Project>
