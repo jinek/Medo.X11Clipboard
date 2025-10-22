@@ -46,6 +46,7 @@
         <RepositoryUrl>https://github.com/jinek/Medo.X11Clipboard</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <Description>Fork of Medo.X11Clipboard by Josip Medved. CA1031 compliance, custom exception (X11ClipboardException), and UnhandledException event. Changes implemented by Junie with ChatGPT-5.</Description>
+        <PackageReleaseNotes>$([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)../../CHANGELOG.md'))</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>

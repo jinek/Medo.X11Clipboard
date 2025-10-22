@@ -22,12 +22,6 @@ jobs:
       - name: Build (Release)
         run: dotnet build src/_MultiFramework/Medo.X11Clipboard_Multi.csproj --configuration Release --no-restore
 
-      - name: Prepare Release Notes
-        shell: bash
-        run: |
-          # Escape newlines to avoid MSBuild parsing them as separate switches
-          RELEASE_NOTES=$(awk '{printf "%s\\n", $0}' CHANGELOG.md)
-          echo "RELEASE_NOTES=$RELEASE_NOTES" >> "$GITHUB_ENV"
 
       - name: Pack
         run: |
@@ -35,8 +29,7 @@ jobs:
             --configuration Release \
             --no-build \
             --output ./artifacts \
-            -p:ContinuousIntegrationBuild=true \
-            -p:PackageReleaseNotes="$RELEASE_NOTES"
+            -p:ContinuousIntegrationBuild=true
 
       - name: Publish to NuGet
         env:
