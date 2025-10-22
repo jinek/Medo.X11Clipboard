@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <AssemblyName>Medo.X11Clipboard</AssemblyName>
-        <RootNamespace>Medo.X11</RootNamespace>
+        <AssemblyName>jinek.X11Clipboard.Fork</AssemblyName>
+        <RootNamespace>jinek.X11</RootNamespace>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -33,22 +33,19 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <PackageId>Medo.X11Clipboard</PackageId>
-        <Version>0.0.0</Version>
-        <Authors>Josip Medved</Authors>
-        <Copyright>Copyright (c) 2024 Josip Medved</Copyright>
-        <Company>www.medo64.com</Company>
+        <PackageId>jinek.X11Clipboard.Fork</PackageId>
+        <Version>1.0.0</Version>
+        <Authors>Evgeny Gorbovoy</Authors>
+        <Copyright>Copyright (c) 2024-2025 Evgeny Gorbovoy</Copyright>
+        <Company></Company>
         <PackageTags>X11,Clipboard,Primary</PackageTags>
         <PackageIcon>ICON.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/medo64/Medo.X11Clipboard/</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/medo64/Medo.X11Clipboard/</RepositoryUrl>
-        <RepositoryType>Git</RepositoryType>
-        <Description>
-            A library that allows UTF-8 access for X11's both primary selection
-            and main clipboard.
-        </Description>
+        <PackageProjectUrl>https://github.com/jinek/Medo.X11Clipboard</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/jinek/Medo.X11Clipboard</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <Description>Fork of Medo.X11Clipboard by Josip Medved. CA1031 compliance, custom exception (X11ClipboardException), and UnhandledException event. Changes implemented by Junie with ChatGPT-5.</Description>
     </PropertyGroup>
 
     <ItemGroup>

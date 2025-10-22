@@ -2,7 +2,7 @@ namespace Tests;
 
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Medo.X11;
+using jinek.X11;
 using System.Security.Cryptography;
 
 [TestClass]
