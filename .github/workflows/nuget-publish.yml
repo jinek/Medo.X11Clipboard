@@ -49,9 +49,3 @@ jobs:
               --api-key "$NUGET_API_KEY" \
               --skip-duplicate
 
-
-      - name: Skip publish (no API key configured)
-        if: ${{ !secrets.NUGET_API_KEY || secrets.NUGET_API_KEY == '' }}
-        run: echo "NUGET_API_KEY secret not configured. Skipping publish."
-
-
