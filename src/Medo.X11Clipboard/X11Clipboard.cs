@@ -20,6 +20,16 @@ using System.Threading;
 public class X11Clipboard {
 #pragma warning restore CA1001
 
+    static X11Clipboard() {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
+            try {
+                _ = NativeMethods.XInitThreads();
+            } catch (DllNotFoundException) {
+                // ignore if libX11 not found, will be handled in instance constructor
+            }
+        }
+    }
+
     private X11Clipboard(string clipboardAtomName) {
         ClipboardTag = clipboardAtomName[0..3];
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
@@ -145,6 +155,7 @@ public class X11Clipboard {
                                                                        propagate: false,
                                                                        eventMask: IntPtr.Zero,
                                                                        ref sendEvent);
+                                NativeMethods.XFlush(DisplayPtr);
                                 if (resSend == 0) { Debug.WriteLine($"[X11Clipboard:{ClipboardTag}]   Failed to send event"); }
 
                             } else if (requestEvent.target == Utf8StringAtom) {
@@ -177,6 +188,7 @@ public class X11Clipboard {
                                                                        propagate: false,
                                                                        eventMask: IntPtr.Zero,
                                                                        ref sendEvent);
+                                NativeMethods.XFlush(DisplayPtr);
                                 if (resSend == 0) { Debug.WriteLine($"[X11Clipboard:{ClipboardTag}]   Failed to send event"); }
                             }
                         }
@@ -277,6 +289,7 @@ public class X11Clipboard {
             BytesOut = [];
         }
         NativeMethods.XSetSelectionOwner(DisplayPtr, ClipboardAtom, IntPtr.Zero, 0);
+        NativeMethods.XFlush(DisplayPtr);
         Debug.WriteLine($"[X11Clipboard:{ClipboardTag}] Clear(): Ownership cleared");
     }
 
@@ -315,6 +328,7 @@ public class X11Clipboard {
             BytesOut = Encoding.UTF8.GetBytes(text);
         }
         NativeMethods.XSetSelectionOwner(DisplayPtr, ClipboardAtom, WindowPtr, 0);
+        NativeMethods.XFlush(DisplayPtr);
         Debug.WriteLine($"[X11Clipboard:{ClipboardTag}] SetText(): Ownership set");
     }
 
@@ -475,6 +489,9 @@ public class X11Clipboard {
 
         [DllImport("libX11")]
         public extern static void XNextEvent(IntPtr display, ref XEvent event_return);
+
+        [DllImport("libX11")]
+        public extern static Int32 XInitThreads();
 
         [DllImport("libX11", BestFitMapping = false)]
         public extern static IntPtr XOpenDisplay([MarshalAs(UnmanagedType.LPUTF8Str)] String? display_name);
