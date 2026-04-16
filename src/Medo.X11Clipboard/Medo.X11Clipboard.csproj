@@ -4,6 +4,7 @@
     <PropertyGroup>
         <AssemblyName>jinek.X11Clipboard.Fork</AssemblyName>
         <RootNamespace>jinek.X11</RootNamespace>
+        <Version>1.0.0.1</Version>
     </PropertyGroup>
 
     <PropertyGroup>

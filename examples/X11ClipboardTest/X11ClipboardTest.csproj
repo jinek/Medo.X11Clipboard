@@ -16,7 +16,4 @@
         <ProjectReference Include="../../src/Medo.X11Clipboard/Medo.X11Clipboard.csproj" />
     </ItemGroup>
 
-    <PropertyGroup>
-      <Version>1.0.0.1</Version>
-    </PropertyGroup>
 </Project>
