@@ -1,5 +1,9 @@
 CHANGELOG
 
+[fork-1.0.0.1] (2026-04-16)
+
+- Fixed bug where clipboard text set failed silently when UnhandledException event was subscribed to before setting text.
+
 [fork-1.0.0] (2025-10-21)
 
 - Fork: CA1031 compliance and exception handling adjustments.
@@ -16,4 +20,5 @@ CHANGELOG
 
 [unreleased]: https://github.com/jinek/Medo.X11Clipboard
 [1.0.0]: https://www.nuget.org/packages/Medo.X11Clipboard/1.0.0
+[fork-1.0.0.1]: https://www.nuget.org/packages/jinek.X11Clipboard.Fork/1.0.0.1
 [fork-1.0.0]: https://www.nuget.org/packages/jinek.X11Clipboard.Fork/1.0.0
